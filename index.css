@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0d1117;
+  --cyan: #00f2fe;
+  --purple: #7000ff;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Smooth black/white glows and transitions */
+.glow-cyan {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glow-cyan:hover {
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  border-color: #00f2fe;
+}
+
+.pricing-card {
+  transition: all 0.3s cubic-bezier(0.23, 1.0, 0.32, 1);
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+}
+
+.pricing-card.popular {
+  border-color: #00f2fe;
+  position: relative;
+}
+
+.pricing-card.popular::before {
+  content: 'MOST POPULAR';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(to right, #00f2fe, #7000ff);
+  color: #0d1117;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 1px 14px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* Pulsing status */
+.status-pulse {
+  animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+/* Modal styles */
+.modal {
+  animation: modalEnter 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes modalEnter {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Button glows */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.25),
+    transparent
+  );
+  transition: left 0.6s;
+}
+
+.btn-glow:hover::after {
+  left: 250%;
+}
+
+/* Cyber nav */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -1px;
+  left: 0;
+  background: linear-gradient(to right, #00f2fe, #7000ff);
+  transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.nav-link:hover:after {
+  width: 100%;
+}
+
+/* Notice bar */
+.notice-bar {
+  animation: slideDown 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Fake dashboard elements in modals */
+.fake-metric {
+  font-variant-numeric: tabular-nums;
+}
