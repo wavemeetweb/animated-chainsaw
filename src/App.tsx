@@ -268,9 +268,12 @@ const App: React.FC = () => {
     setIsSendingLink(true);
 
     try {
+      // IMPORTANT: Use your exact authorized production domain here.
+      // This must exactly match one of the domains you added in Firebase Console > Authentication > Authorized domains.
+      const productionUrl = 'https://sitenet.macrofox.org';
+
       const actionCodeSettings = {
-        // The URL to redirect back to. Must match an authorized domain in Firebase Console.
-        url: `${window.location.origin}${window.location.pathname}`,
+        url: productionUrl,
         handleCodeInApp: true,
       };
 
@@ -279,7 +282,7 @@ const App: React.FC = () => {
       // Store the email locally — Firebase needs it when completing the sign-in
       window.localStorage.setItem('sitenet_emailForSignIn', emailInput);
 
-      console.log(`[SiteNet] Passwordless sign-in link sent to ${emailInput}`);
+      console.log(`[SiteNet] Passwordless sign-in link sent to ${emailInput} (points to ${productionUrl})`);
 
       setIsSendingLink(false);
       setAuthStep('sent');
@@ -288,7 +291,7 @@ const App: React.FC = () => {
     } catch (error: any) {
       console.error('Firebase passwordless error:', error);
       setIsSendingLink(false);
-      showToast('Failed to send sign-in link. Make sure your domain is authorized in Firebase Console.', 'error');
+      showToast('Failed to send sign-in link. Make sure your exact domain is authorized in Firebase Console.', 'error');
     }
   };
 
@@ -502,21 +505,21 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div onClick={() => { setView('dashboard'); setShowNewProject(false); }} className="flex items-center gap-3 cursor-pointer">
-                <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#00f2fe] to-[#7000ff] flex items-center justify-center">
                   <span className="text-[#0d1117] text-lg font-bold">S</span>
                 </div>
                 <div>
                   <span className="font-semibold text-xl tracking-tight">SiteNet</span>
-                  <span className="text-white/60 text-xs ml-1.5 font-mono">HOSTING</span>
+                  <span className="text-[#00f2fe] text-xs ml-1.5 font-mono">HOSTING</span>
                 </div>
               </div>
-              <div className="hidden sm:block text-xs px-2.5 py-0.5 rounded bg-white/5 text-white/60">sitnet.macrofox.org</div>
+              <div className="hidden sm:block text-xs px-2.5 py-0.5 rounded bg-white/5 text-white/60">sitenet.macrofox.org</div>
             </div>
 
             <div className="flex items-center gap-3 text-sm">
               <button 
                 onClick={openNewProject} 
-                className="btn-glow px-5 py-2 rounded-xl bg-white text-[#0d1117] font-semibold hover:bg-white/90 active:scale-[0.985] transition-all flex items-center gap-2"
+                className="btn-glow px-5 py-2 rounded-xl bg-white text-[#0d1117] font-semibold hover:bg-[#00f2fe] active:scale-[0.985] transition-all flex items-center gap-2"
               >
                 + New Project
               </button>
@@ -551,7 +554,7 @@ const App: React.FC = () => {
                   <h1 className="text-5xl font-semibold tracking-[-2px]">Projects</h1>
                   <p className="text-white/60 mt-1">Deployments on the SiteNet global edge network</p>
                 </div>
-                <button onClick={openNewProject} className="btn-glow px-8 py-3 rounded-2xl bg-white text-[#0d1117] font-semibold flex items-center gap-2">
+                <button onClick={openNewProject} className="btn-glow px-8 py-3 rounded-2xl bg-[#00f2fe] text-[#0d1117] font-semibold flex items-center gap-2">
                   + New Project
                 </button>
               </div>
@@ -559,7 +562,7 @@ const App: React.FC = () => {
               {/* Projects Grid — Vercel style */}
               {isLoadingProjects ? (
                 <div className="border border-white/10 rounded-3xl p-16 text-center bg-[#161b22]">
-                  <div className="mx-auto w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin mb-4" />
+                  <div className="mx-auto w-8 h-8 border-4 border-[#00f2fe]/30 border-t-[#00f2fe] rounded-full animate-spin mb-4" />
                   <p className="text-white/60">Loading your projects from the cloud...</p>
                 </div>
               ) : projects.length === 0 ? (
@@ -580,7 +583,7 @@ const App: React.FC = () => {
                             href={`https://${project.url}`} 
                             target="_blank" 
                             onClick={(e) => { e.preventDefault(); visitProject(project); }}
-                            className="text-white/80 hover:text-white hover:underline text-sm font-mono mt-0.5 block"
+                            className="text-[#00f2fe] hover:underline text-sm font-mono mt-0.5 block"
                           >
                             {project.url}
                           </a>
@@ -635,7 +638,7 @@ const App: React.FC = () => {
                       />
                       <button 
                         onClick={handleImportRepo}
-                        className="px-8 rounded-2xl bg-white text-[#0d1117] font-semibold active:scale-95"
+                        className="px-8 rounded-2xl bg-[#00f2fe] text-[#0d1117] font-semibold active:scale-95"
                       >
                         Import
                       </button>
@@ -699,7 +702,7 @@ const App: React.FC = () => {
                       <button 
                         onClick={startDeployment} 
                         disabled={isDeploying}
-                        className="mt-8 w-full py-4 bg-white text-[#0d1117] font-bold rounded-2xl text-lg active:scale-[0.985] disabled:opacity-70 flex items-center justify-center gap-3"
+                        className="mt-8 w-full py-4 bg-gradient-to-r from-[#00f2fe] to-white text-[#0d1117] font-bold rounded-2xl text-lg active:scale-[0.985] disabled:opacity-70 flex items-center justify-center gap-3"
                       >
                         {isDeploying ? 'DEPLOYING...' : 'DEPLOY TO SITENET'}
                       </button>
@@ -712,12 +715,12 @@ const App: React.FC = () => {
               {/* Deployment Progress (Vercel style) */}
               {isDeploying && (
                 <div className="mt-8 bg-[#161b22] border border-white/10 rounded-3xl p-10 text-center">
-                  <div className="mx-auto w-10 h-10 border-4 border-white/30 border-t-white rounded-full animate-spin mb-6" />
+                  <div className="mx-auto w-10 h-10 border-4 border-[#00f2fe]/30 border-t-[#00f2fe] rounded-full animate-spin mb-6" />
                   <div className="text-2xl font-semibold mb-2">Deploying {projectName}</div>
-                  <div className="text-white/80 font-mono mb-8">{deployStep}</div>
+                  <div className="text-[#00f2fe] font-mono mb-8">{deployStep}</div>
                   
                   <div className="h-1.5 bg-white/10 rounded-full max-w-md mx-auto overflow-hidden">
-                    <div className="h-1.5 bg-white transition-all duration-500" style={{ width: `${deployProgress}%` }} />
+                    <div className="h-1.5 bg-[#00f2fe] transition-all duration-500" style={{ width: `${deployProgress}%` }} />
                   </div>
                   <div className="text-xs text-white/60 mt-2 tabular-nums">{deployProgress}% complete</div>
                 </div>
@@ -725,13 +728,13 @@ const App: React.FC = () => {
 
               {/* Success Screen */}
               {deployedProject && (
-                <div className="mt-8 bg-[#161b22] border border-white/30 rounded-3xl p-10 text-center">
+                <div className="mt-8 bg-[#161b22] border border-[#00f2fe]/30 rounded-3xl p-10 text-center">
                   <div className="text-6xl mb-4">🎉</div>
                   <div className="text-3xl font-semibold tracking-tight mb-1">Deployment successful</div>
-                  <div className="text-white/90 font-mono text-xl mb-8">{deployedProject.url}</div>
+                  <div className="text-[#00f2fe] font-mono text-xl mb-8">{deployedProject.url}</div>
 
                   <div className="flex gap-4 justify-center">
-                    <button onClick={() => visitProject(deployedProject)} className="btn-glow px-9 py-3.5 rounded-2xl bg-white text-[#0d1117] font-semibold">Visit Live Site</button>
+                    <button onClick={() => visitProject(deployedProject)} className="btn-glow px-9 py-3.5 rounded-2xl bg-[#00f2fe] text-[#0d1117] font-semibold">Visit Live Site</button>
                     <button onClick={closeNewProject} className="px-9 py-3.5 rounded-2xl border border-white/20 hover:bg-white/5">Done — View Projects</button>
                   </div>
                 </div>
@@ -762,12 +765,12 @@ const App: React.FC = () => {
             <div className="flex items-center gap-3">
               <div className="text-xl">💡</div>
               <p className="text-[#e2e8f0] leading-tight">
-                <span className="font-medium text-white/90">Migration Update:</span> We have successfully upgraded our network node directory to <span className="font-semibold">macrofox.org</span> infrastructure for enhanced permanent global connection speeds.
+                <span className="font-medium text-[#00f2fe]">Migration Update:</span> We have successfully upgraded our network node directory to <span className="font-semibold">macrofox.org</span> infrastructure for enhanced permanent global connection speeds.
               </p>
             </div>
             <button 
               onClick={() => setNoticeVisible(false)}
-              className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors" 
+              className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-[#00f2fe] hover:text-white transition-colors" 
               aria-label="Dismiss notice"
             >
               ✕
@@ -780,14 +783,14 @@ const App: React.FC = () => {
       <nav className="sticky top-[52px] z-50 bg-[#0d1117]/95 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00f2fe] via-[#7000ff] to-[#00f2fe] flex items-center justify-center shadow-[0_0_20px_rgba(0,242,254,0.5)]">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
               </svg>
             </div>
             <div>
               <div className="font-semibold tracking-[-0.5px] text-2xl">SiteNet</div>
-              <div className="text-[9px] text-white/60 -mt-1 font-mono tracking-[2px]">SITENET.MACROFOX.ORG</div>
+              <div className="text-[9px] text-[#00f2fe] -mt-1 font-mono tracking-[2px]">SITENET.MACROFOX.ORG</div>
             </div>
           </div>
 
@@ -799,12 +802,12 @@ const App: React.FC = () => {
           <div className="flex items-center gap-3">
             <button 
               onClick={handleNavAuthClick}
-              className="btn-glow px-6 py-2.5 rounded-full text-sm font-semibold border border-white/20 hover:border-white bg-white/5 hover:bg-white/10 transition-all flex items-center gap-2"
+              className="btn-glow px-6 py-2.5 rounded-full text-sm font-semibold border border-white/20 hover:border-[#00f2fe] bg-white/5 hover:bg-white/10 transition-all flex items-center gap-2"
             >
               {loggedIn ? 'Go to Dashboard' : 'Client Login'}
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00f2fe] animate-pulse" />
             </button>
-            <button onClick={() => { if (!loggedIn) openAuth(); else setView('dashboard'); }} className="md:hidden px-5 py-2 bg-white text-[#0d1117] rounded-full text-sm font-semibold">Get Started</button>
+            <button onClick={() => { if (!loggedIn) openAuth(); else setView('dashboard'); }} className="md:hidden px-5 py-2 bg-[#00f2fe] text-[#0d1117] rounded-full text-sm font-semibold">Get Started</button>
           </div>
         </div>
       </nav>
@@ -824,7 +827,7 @@ const App: React.FC = () => {
 
           <h1 className="text-[56px] md:text-[72px] leading-[1.02] font-semibold tracking-tighter mb-4">
             Cloud Infrastructure<br />Made Simple.<br />
-            <span className="text-white/90">Fast. Free. Limitless.</span>
+            <span className="bg-gradient-to-r from-[#00f2fe] via-[#7000ff] to-[#00f2fe] bg-clip-text text-transparent">Fast. Free. Limitless.</span>
           </h1>
 
           <p className="max-w-xl mx-auto text-xl text-white/70 mb-10 tracking-tight">
@@ -835,12 +838,12 @@ const App: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => { if (loggedIn) setView('dashboard'); else openAuth(); }}
-              className="btn-glow group px-10 py-[17px] rounded-2xl text-lg font-semibold bg-white text-[#0d1117] hover:bg-white/90 active:scale-[0.985] transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] flex items-center justify-center gap-3"
+              className="btn-glow group px-10 py-[17px] rounded-2xl text-lg font-semibold bg-white text-[#0d1117] hover:bg-[#00f2fe] hover:text-[#0d1117] active:scale-[0.985] transition-all shadow-[0_0_35px_rgba(0,242,254,0.3)] flex items-center justify-center gap-3"
             >
               LAUNCH YOUR SERVER
               <span className="text-xl group-hover:translate-x-0.5 transition">→</span>
             </button>
-            <button onClick={() => scrollToSection('features')} className="px-8 py-[17px] rounded-2xl text-lg font-semibold border border-white/25 hover:border-white hover:bg-white/5 transition-all">Explore Features</button>
+            <button onClick={() => scrollToSection('features')} className="px-8 py-[17px] rounded-2xl text-lg font-semibold border border-white/25 hover:border-[#00f2fe] hover:bg-white/5 transition-all">Explore Features</button>
           </div>
 
           <div className="mt-9 flex justify-center gap-8 text-sm text-white/50">
@@ -853,21 +856,21 @@ const App: React.FC = () => {
       {/* FEATURES */}
       <section id="features" className="max-w-6xl mx-auto px-6 pb-24">
         <div className="text-center mb-12">
-          <div className="uppercase tracking-[3px] text-xs text-white/60 font-semibold mb-2">BUILT FOR PERFORMANCE</div>
+          <div className="uppercase tracking-[3px] text-xs text-[#00f2fe] font-semibold mb-2">BUILT FOR PERFORMANCE</div>
           <h2 className="text-5xl font-semibold tracking-tighter">Next-generation infrastructure.<br />Zero complexity.</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           <div className="card-hover group bg-[#161b22] border border-white/10 rounded-3xl p-9 flex flex-col">
-            <div className="w-14 h-14 mb-8 rounded-2xl bg-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+            <div className="w-14 h-14 mb-8 rounded-2xl bg-gradient-to-br from-[#00f2fe] to-[#00f2fe]/70 flex items-center justify-center shrink-0 shadow-[0_0_22px_rgba(0,242,254,0.35)]">
               <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="#0d1117" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
             </div>
             <h3 className="text-3xl tracking-[-1.2px] font-semibold mb-3">Blazing NVMe Speed</h3>
             <p className="text-white/70 leading-relaxed flex-1">Ultra-low latency storage with 1.2M IOPS. 8× faster than legacy SSDs. Your sites and APIs feel instant everywhere.</p>
-            <div className="mt-8 pt-6 border-t border-white/10 text-xs uppercase tracking-[2px] text-white/70 font-medium">UP TO 7.4 GB/S READ</div>
+            <div className="mt-8 pt-6 border-t border-white/10 text-xs uppercase tracking-[2px] text-[#00f2fe] font-medium">UP TO 7.4 GB/S READ</div>
           </div>
 
           <div className="card-hover group bg-[#161b22] border border-white/10 rounded-3xl p-9 flex flex-col">
-            <div className="w-14 h-14 mb-8 rounded-2xl bg-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+            <div className="w-14 h-14 mb-8 rounded-2xl bg-gradient-to-br from-[#7000ff] to-[#7000ff]/80 flex items-center justify-center shrink-0 shadow-[0_0_22px_rgba(112,0,255,0.35)]">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d1117" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
             </div>
             <h3 className="text-3xl tracking-[-1.2px] font-semibold mb-3">99.9% Uptime Shield</h3>
@@ -876,12 +879,12 @@ const App: React.FC = () => {
           </div>
 
           <div className="card-hover group bg-[#161b22] border border-white/10 rounded-3xl p-9 flex flex-col">
-            <div className="w-14 h-14 mb-8 rounded-2xl bg-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+            <div className="w-14 h-14 mb-8 rounded-2xl bg-gradient-to-br from-[#00f2fe] via-[#7000ff] to-[#00f2fe] flex items-center justify-center shrink-0 shadow-[0_0_22px_rgba(0,242,254,0.4)]">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0d1117" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10" /><path d="M12 12l-4-4" /><path d="M19 5l-7 7" /><circle cx="12" cy="12" r="3" /></svg>
             </div>
             <h3 className="text-3xl tracking-[-1.2px] font-semibold mb-3">DDoS Defense Node</h3>
             <p className="text-white/70 leading-relaxed flex-1">Always-on volumetric + application layer defense. 15 Tbps scrubbing capacity. Zero impact on legitimate traffic.</p>
-            <div className="mt-8 pt-6 border-t border-white/10 text-xs uppercase tracking-[2px] text-white/70 font-medium">PROTECTED 24/7 • 3.2B ATTACKS MITIGATED</div>
+            <div className="mt-8 pt-6 border-t border-white/10 text-xs uppercase tracking-[2px] text-[#00f2fe] font-medium">PROTECTED 24/7 • 3.2B ATTACKS MITIGATED</div>
           </div>
         </div>
       </section>
@@ -907,8 +910,8 @@ const App: React.FC = () => {
       <footer className="border-t border-white/10 bg-[#0a0d12] pt-14 pb-9 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-y-8 text-sm">
           <div>
-            <div className="flex items-center gap-2.5 mb-1.5"><div className="w-6 h-6 rounded bg-white"></div><span className="font-semibold tracking-tight">SiteNet Hosting</span></div>
-            <div className="text-white/50 text-xs">sitnet.macrofox.org • Global Infrastructure</div>
+            <div className="flex items-center gap-2.5 mb-1.5"><div className="w-6 h-6 rounded bg-gradient-to-br from-[#00f2fe] to-[#7000ff]"></div><span className="font-semibold tracking-tight">SiteNet Hosting</span></div>
+            <div className="text-white/50 text-xs">sitenet.macrofox.org • Global Infrastructure</div>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-1 text-white/60 text-sm">
             <button onClick={() => scrollToSection('features')} className="hover:text-white transition-colors">Features</button>
@@ -961,6 +964,7 @@ const App: React.FC = () => {
                     A sign-in link has been sent to<br />
                     <span className="font-medium text-white">{emailInput}</span>
                   </p>
+                  <p className="text-xs text-white/50 mt-2">Open the link on this same device/browser to sign in automatically.</p>
                 </div>
 
                 <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-4 text-sm text-white/70 mb-6">
